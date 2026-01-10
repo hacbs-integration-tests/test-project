@@ -255,7 +255,7 @@ spec:
         - name: name
           value: build-image-index
         - name: bundle
-          value: quay.io/konflux-ci/tekton-catalog/task-build-image-index:0.2@sha256:803ae1ecf35bc5d22be9882819e942e4b699cb17655055afc6bb6b02d34cfab8
+          value: quay.io/konflux-ci/tekton-catalog/task-build-image-index:0.2@sha256:985d1efe861b02524a7679ecd855624b3d4e3a2e835b6f8a97ec7d135898ec0b
         - name: kind
           value: task
         resolver: bundles
@@ -329,7 +329,7 @@ spec:
         - name: name
           value: clair-scan
         - name: bundle
-          value: quay.io/konflux-ci/tekton-catalog/task-clair-scan:0.3@sha256:8ec7d7b9438ace5ef3fb03a533d9440d0fd81e51c73b0dc1eb51602fb7cd044e
+          value: quay.io/konflux-ci/tekton-catalog/task-clair-scan:0.3@sha256:7c2a32de9021f16f6e8df08a55f539f12e00ea4d96f6fb37f9ea04167032c61f
         - name: kind
           value: task
         resolver: bundles
