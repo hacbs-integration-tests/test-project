@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: yarn-e2e-test
+spec:
+  description: |
+    Integration test that verifies that the test-metadata task extracts correct values.
+  params:
+    - name: SNAPSHOT
+      description: The JSON string of the Snapshot under test
+      type: string
+  tasks:
+    - name: test-metadata
+      params:
+        - name: SNAPSHOT
+          value: $(params.SNAPSHOT)
+      taskRef:
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/konflux-ci/tekton-integration-catalog.git
+          - name: revision
+            value: 000baa7c124e1180cc5b29de497e5f4514dcd763
+          - name: pathInRepo
+            value: tasks/test-metadata/0.4/test-metadata.yaml
+    - name: run-sample-test
+      runAfter:
+        - test-metadata
+      params:
+        - name: CONTAINER_IMAGE
+          value: $(tasks.test-metadata.results.container-image)
+        - name: COMPONENT_NAME
+          value: $(tasks.test-metadata.results.component-name)
+      taskSpec:
+        params:
+          - name: CONTAINER_IMAGE
+            type: string
+          - name: COMPONENT_NAME
+            type: string
+        workspaces:
+          - name: test-workspace
+        results:
+          - name: TEST_OUTPUT
+            description: Tekton standardized test output
+        steps:
+          - name: yarn-install
+            image: $(params.CONTAINER_IMAGE)
+            workingDir: $(workspaces.test-workspace.path)
+            script: |
+              #!/usr/bin/env bash
+              set -euo pipefail
+
+              COMPONENT_NAME="$(params.COMPONENT_NAME)"
+              CONTAINER_IMAGE="$(params.CONTAINER_IMAGE)"
+              
+              echo "Component name: ${COMPONENT_NAME}"
+              echo "Container image: ${CONTAINER_IMAGE}"
