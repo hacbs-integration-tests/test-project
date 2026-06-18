@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: yarn-e2e-test
+spec:
+  pipelineRef:
+    resolver: git
+    params:
+      - name: url
+        value: https://github.com/hacbs-integration-tests/test-project.git
+      - name: revision
+        value: main
+      - name: pathInRepo
+        value: .tekton/integration-tests/test-pipeline.yaml
